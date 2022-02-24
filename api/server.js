@@ -1,5 +1,6 @@
 const express = require("express");
 const Cars = require("./cars/cars-model");
+const { validateCarInput, checkVinUnique } = require("./cars/cars-middleware");
 
 const server = express();
 
@@ -23,7 +24,7 @@ server.get("/cars/:id", async (req, res) => {
   }
 });
 
-server.post("/cars", async (req, res) => {
+server.post("/cars", validateCarInput, checkVinUnique, async (req, res) => {
   let result = await Cars.insert(req.body);
   if (result) {
     res.status(201).json(result);

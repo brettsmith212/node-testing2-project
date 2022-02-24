@@ -60,4 +60,12 @@ describe("test server endpoints", () => {
     result = await request(server).get(`/cars/${result.id}`);
     expect(result.body.vin).toBe(sampleCar1.vin);
   });
+
+  test("[POST] /cars", async () => {
+    let result = await request(server).post("/cars").send(sampleCar1);
+    expect(result.status).toBe(201);
+
+    result = await Cars.getById(1);
+    expect(result.vin).toBe(sampleCar1.vin);
+  });
 });
