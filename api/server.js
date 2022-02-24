@@ -1,6 +1,10 @@
 const express = require("express");
 const Cars = require("./cars/cars-model");
-const { validateCarInput, checkVinUnique } = require("./cars/cars-middleware");
+const {
+  validateCarInput,
+  checkVinUnique,
+  checkIdExists,
+} = require("./cars/cars-middleware");
 
 const server = express();
 
@@ -15,7 +19,7 @@ server.get("/cars", async (req, res) => {
   }
 });
 
-server.get("/cars/:id", async (req, res) => {
+server.get("/cars/:id", checkIdExists, async (req, res) => {
   let result = await Cars.getById(req.params.id);
   if (result) {
     res.status(200).json(result);

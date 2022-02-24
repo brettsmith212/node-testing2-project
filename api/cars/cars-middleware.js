@@ -27,7 +27,18 @@ const checkVinUnique = async (req, res, next) => {
   }
 };
 
+const checkIdExists = async (req, res, next) => {
+  let result = await Cars.getById(req.params.id);
+  if (result) {
+    next();
+  } else {
+    res.status(422).json({ message: "ID not found" });
+    return;
+  }
+};
+
 module.exports = {
   validateCarInput,
   checkVinUnique,
+  checkIdExists,
 };
