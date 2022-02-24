@@ -5,12 +5,31 @@ const server = express();
 
 server.use(express.json());
 
-server.get("/cars", (req, res) => {
-  res.status(200).json({ message: "GET WORKING" });
+server.get("/cars", async (req, res) => {
+  let result = await Cars.getAll();
+  if (result) {
+    res.status(200).json(result);
+  } else {
+    res.status(500).json({ message: "error getting cars" });
+  }
 });
 
-server.post("/cars", (req, res) => {
-  res.status(201).json({ message: "POST WORKING" });
+server.get("/cars/:id", async (req, res) => {
+  let result = await Cars.getById(req.params.id);
+  if (result) {
+    res.status(200).json(result);
+  } else {
+    res.status(500).json({ message: "error finding car" });
+  }
+});
+
+server.post("/cars", async (req, res) => {
+  let result = await Cars.insert(req.body);
+  if (result) {
+    res.status(201).json(result);
+  } else {
+    res.status(500).json({ message: "error adding car" });
+  }
 });
 
 module.exports = server;
